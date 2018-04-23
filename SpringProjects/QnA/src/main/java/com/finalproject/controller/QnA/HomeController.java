@@ -136,6 +136,7 @@ public class HomeController {
 				hMap.put("fname", fname);
 				hMap.put("lname", lname);
 				hMap.put("email", email);
+				
 				HttpSession session = request.getSession(true);
 				session.setAttribute("UserSession", usr);
 				return hMap;

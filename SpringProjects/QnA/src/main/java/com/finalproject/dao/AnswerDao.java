@@ -14,6 +14,7 @@ import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,7 @@ import com.finalproject.pojo.User;
 
 public class AnswerDao extends DAO {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+
 	public Answer saveAnswer(String answerContent, Question q, User u) {
 		Answer a = new Answer();
 		a.setAnswerContent(answerContent);
@@ -40,48 +42,54 @@ public class AnswerDao extends DAO {
 		}
 		return null;
 	}
-	
-	public List<Answer> getAnswersByQuestion(Question q) {
+
+	public ArrayList<Answer> getAnswersByQuestion(Question q) {
 		int qId = q.getQuestionID();
-		logger.info("question id here "+qId);
-		Criteria crit = getSession().createCriteria(Question.class);
-		crit.add(Restrictions.eq("questionID", qId));
-		List<Answer> answerList = crit.list();
+		logger.info("question id here " + qId);
+		Query query = getSession().createQuery("from Answer where questionID = ?");
+		query.setInteger(0, qId);
+		logger.info(String.valueOf(query));
+		query.setComment("HQL " + query);
+
+		// Criteria crit = getSession().createCriteria(Answer.class);
+		// crit.add(Restrictions.eq("questionID", qId));
+		ArrayList<Answer> answerList = (ArrayList<Answer>) query.list();
 		return answerList;
 	}
 
-//	public Answer addQuestion(Question q, Answer a) {
-//		// TODO Auto-generated method stub
-//		begin();
-//		getSession().save(a);
-//		commit();
-//		close();
-//		return a;
-//	}
+	// public Answer addQuestion(Question q, Answer a) {
+	// // TODO Auto-generated method stub
+	// begin();
+	// getSession().save(a);
+	// commit();
+	// close();
+	// return a;
+	// }
 
-//	public List<Question> getAllQuestions() {
-//		begin();
-//		List<Question> allQuestions = getSession().createQuery("from Question").list();
-//		close();
-//		return allQuestions;
-//	}
-//
-//	public Question getQuestionByName(String questionText) {
-//		try {
-//			Criteria crit = getSession().createCriteria(Question.class);
-//			crit.add(Restrictions.ilike("question", questionText, MatchMode.EXACT));
-//			crit.setMaxResults(1);
-//			Question quest = (Question) crit.uniqueResult();
-//			if (quest != null) {
-//				return quest;
-//			} else {
-//				return null;
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
+	// public List<Question> getAllQuestions() {
+	// begin();
+	// List<Question> allQuestions = getSession().createQuery("from
+	// Question").list();
+	// close();
+	// return allQuestions;
+	// }
+	//
+	// public Question getQuestionByName(String questionText) {
+	// try {
+	// Criteria crit = getSession().createCriteria(Question.class);
+	// crit.add(Restrictions.ilike("question", questionText, MatchMode.EXACT));
+	// crit.setMaxResults(1);
+	// Question quest = (Question) crit.uniqueResult();
+	// if (quest != null) {
+	// return quest;
+	// } else {
+	// return null;
+	// }
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// return null;
+	// }
 
 	// public List<Question> getSome() {
 	// begin();

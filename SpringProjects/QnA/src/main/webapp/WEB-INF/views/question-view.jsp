@@ -11,8 +11,29 @@
 	jQuery(function($) {
 		var pathname = window.location.protocol + "//" + window.location.host
 				+ "/QnA";
-		$.post("/QnA/answer/getall", {questionId:'${question.questionID}'}, function(data, status){
-			console.log(data)
+		$.post("/QnA/answer/getall", {questionId:'${question.questionID}'}, function(data, status) {
+			var size = Object.keys(data).length;
+			$("#totalAnswers").append(size+" Answers");
+			//console.log(size)
+			for (var i = 1; i <= size; i++) {
+				for(var j = 0; j < 3; j++) {
+					var answerText = "";
+					var authorInfo = "";
+					if(j==0) {
+						// Author Name
+						answerText += "<p>"+data[i][j]+"</p>";
+					} else if(j == 1) {
+						// Posted date
+						answerText += "<p>"+data[i][j]+"</p>";
+					} else {
+						// Answer content
+						answerText += "<p>"+data[i][j]+"</p>";
+					}
+					$(".answerList").append("<div class='author_info'>"+authorInfo+"</div>");
+					$(".answerList").append("<div class='answer_text'>"+answerText+"</div>");
+				}
+				$(".answerList").append("<hr/>");
+			}
 		})
 		$("#postAnswer").on("click", function(e) {
 			e.preventDefault();
@@ -44,6 +65,10 @@
 	<p>
 		<button id="postAnswer">Post Answer</button>
 	</p>
-	<div id="answerList"></div>
+	<div id="answerList">
+	<div id="totalAnswers"></div>
+	<hr/>
+	<div class="answerList"></div>
+	</div>
 </body>
 </html>

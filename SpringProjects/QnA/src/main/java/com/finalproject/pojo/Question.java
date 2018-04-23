@@ -30,7 +30,7 @@ public class Question {
 	@Column(name = "question")
 	private String question;
 
-	@Column(name = "description")
+	@Column(name = "description", columnDefinition = "TEXT")
 	private String qDescription;
 
 	@Temporal(TemporalType.TIMESTAMP)

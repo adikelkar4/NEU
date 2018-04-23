@@ -15,6 +15,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "answer")
 public class Answer {
@@ -36,11 +39,11 @@ public class Answer {
 	@Column(name = "answeredOn")
 	private Date answerDateTime = new Date();
 
-	@Column(name = "answerContent")
+	@Column(name = "answerContent", columnDefinition = "TEXT")
 	private String answerContent;
 
 	@Column(name = "isAnonymous")
-	private int isAnonymous = 0;	
+	private int isAnonymous = 0;
 
 	public int getIsAnonymous() {
 		return isAnonymous;
