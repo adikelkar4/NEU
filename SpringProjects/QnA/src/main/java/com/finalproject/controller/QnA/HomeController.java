@@ -5,6 +5,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +34,7 @@ import com.finalproject.dao.QuestionDao;
 import com.finalproject.dao.UserDao;
 import com.finalproject.pojo.Question;
 import com.finalproject.pojo.User;
+
 /**
  * Handles requests for the application home page.
  */
@@ -61,7 +63,6 @@ public class HomeController {
 	@RequestMapping(value = "/view/{question_code}", method = RequestMethod.GET)
 	public ModelAndView getQuestionPage(HttpServletRequest request, @PathVariable("question_code") String param) {
 		if (param != "") {
-			param = param.replace("-", " ");
 			logger.info(param);
 			Question q = questionDao.getQuestionByName(param);
 			return new ModelAndView("question-view", "question", q);
@@ -127,24 +128,40 @@ public class HomeController {
 		} else {
 			if (!userDao.userExists(email)) {
 				User usr = new User();
+				String token = UUID.randomUUID().toString();
 				usr.setFname(fname);
 				usr.setLname(lname);
 				usr.setEmail(email);
 				usr.setPassword(password);
+				usr.setIsActive(false);
+				usr.setUniqueToken(token);
 				userDao.adduser(usr);
 				hMap.put("Success", "Sign up Successful! You will be redirected now");
 				hMap.put("fname", fname);
 				hMap.put("lname", lname);
 				hMap.put("email", email);
-				
+				hMap.put("uid", (String.valueOf(usr.getUserID())));
+				hMap.put("token", usr.getUniqueToken());
+
 				HttpSession session = request.getSession(true);
 				session.setAttribute("UserSession", usr);
 				return hMap;
 			} else {
 				return null;
 			}
-
 		}
+	}
+
+	@RequestMapping("user/validate/{id}/{token}")
+	public String activateUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id,
+			@PathVariable("token") String token) {
+		User usr = userDao.validateUser(id, token);
+		if (usr != null) {
+			HttpSession session = request.getSession(true);
+			session.setAttribute("UserSession", usr);
+			return "active";
+		}
+		return null;
 	}
 
 	@RequestMapping(value = "login/checklogin", method = RequestMethod.POST, produces = "application/json")

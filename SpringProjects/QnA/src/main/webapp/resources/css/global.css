@@ -1,0 +1,76 @@
+body {
+	background: url("/QnA/resources/images/question-and-answer-md.png") fixed;
+	top: 0;
+	left: 0;
+	color: black;
+	min-width: 100%;
+	min-height: 100%;
+	font-family: "Trebuchet MS", "Bookman Old Style", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+}
+
+.container {
+	background-color: whitesmoke;
+	margin-top: 4%;
+	padding-top: 1% !important;
+}
+.error {
+	color: red;
+}
+
+.questionAnchor {
+	color: black;
+	font-size: 20px;
+}
+.questionAnchor:hover {
+	color: black;
+}
+
+/* Style the navbar */
+#navbar {
+  overflow: hidden;
+  background-color: #333;
+}
+
+/* Navbar links */
+#navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+/* Page content */
+.content {
+  padding: 16px;
+}
+
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%
+}
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .content {
+  padding-top: 60px;
+}
+
+.site_root {
+	padding-right: 0;
+}
+
+.writeAnswerTitle, .postAnswer {
+	background-color: #F5F5F5;
+	width: 117.5%;
+}
+
+.answerSpace {
+	margin-bottom: 0 !important;
+}
+
+.answerOps {
+	font-size: 12px;
+}

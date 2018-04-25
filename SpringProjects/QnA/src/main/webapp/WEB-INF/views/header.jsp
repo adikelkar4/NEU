@@ -22,6 +22,7 @@
 	integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
 	crossorigin="anonymous"></script>
 
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
@@ -30,15 +31,14 @@
 	rel="stylesheet" />
 </head>
 <body>
-	<div class="site_header">
-		<div class="navbar">
-			<!--<ul>
-				<div><a href="/QnA"> <img alt="QnA_Logo" height="15%" width="10%"
-						src="${pageContext.request.contextPath}/resources/images/logo.PNG"></a>
-				</div>
-				<div><a href="news.asp">Notifications</a></div>
-				<div>Hey ${sessionScope.UserSession.fname}!</div>
-				<div><a href="logout">Logout</a></div>
-			</ul>-->
+	<header>
+		<div id="navbar">
+			<a class="site_root" href="${pageContext.request.contextPath}"><img
+				class="header_logo" style="width: 50%; height: 7%;"
+				src="${pageContext.request.contextPath}/resources/images/logo_root.png" /></a>
+			<c:if test="${sessionScope.UserSession.isActive == true}">
+				<a style="padding-top: 1.5%;" href="#">Welcome ${sessionScope.UserSession.fname}!</a>
+				<a style="padding-top: 1.5%;" href="${pageContext.request.contextPath}/logout">Logout</a>
+			</c:if>
 		</div>
-	</div>
+	</header>

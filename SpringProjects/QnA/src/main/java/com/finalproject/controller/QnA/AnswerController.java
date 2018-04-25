@@ -52,6 +52,13 @@ public class AnswerController {
 			return false;
 		}
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/answer/delete", method = RequestMethod.POST)
+	private Boolean deleteAnswer(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("questionId") int questionId, @RequestParam("user") String userId) {
+		return false;
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/answer/getall", method = RequestMethod.POST, produces = "application/json")
@@ -60,7 +67,6 @@ public class AnswerController {
 		Question q = questionDao.getQuestionById(question);
 		ArrayList<Answer> ans = (ArrayList<Answer>) answerDao.getAnswersByQuestion(q);
 		HashMap<Integer, String[]> answerList = new HashMap<Integer, String[]>();
-		logger.info("ANSWER CONTROLLER FRO AJAX last one");
 		int counter = 1;
 		for (Answer a : ans) {
 			String tempArr[] = new String[3];

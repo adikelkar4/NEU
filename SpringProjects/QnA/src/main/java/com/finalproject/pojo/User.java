@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -37,6 +39,12 @@ public class User {
 
 	@Column(name = "password")
 	private String password;
+	
+	@Column(name = "isActive", nullable = false, columnDefinition = "BIT default 0")
+	private Boolean isActive;
+	
+	@Column(name="token", nullable = false)
+	private String uniqueToken;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Question> questions = new HashSet<Question>();
@@ -48,7 +56,26 @@ public class User {
 	private Set<Notification> notification = new HashSet<Notification>();
 
 	public User() {
-	}	
+	}
+	
+	public String getUniqueToken() {
+		return uniqueToken;
+	}
+
+
+	public void setUniqueToken(String uniqueToken) {
+		this.uniqueToken = uniqueToken;
+	}
+
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
 
 	public Set<Notification> getNotification() {
 		return notification;

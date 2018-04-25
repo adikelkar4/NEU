@@ -27,6 +27,9 @@ public class Question {
 	@Column(name = "questionID", unique = true, nullable = false)
 	private int questionID;
 
+	@Column(name = "question_encoded", columnDefinition = "TEXT")
+	private String questionEncoded;
+
 	@Column(name = "question")
 	private String question;
 
@@ -45,6 +48,14 @@ public class Question {
 	private Set<Answer> answers = new HashSet<Answer>();
 
 	public Question() {
+	}
+
+	public String getQuestionEncoded() {
+		return questionEncoded;
+	}
+
+	public void setQuestionEncoded(String questionEncoded) {
+		this.questionEncoded = questionEncoded;
 	}
 
 	public Set<Answer> getAnswers() {

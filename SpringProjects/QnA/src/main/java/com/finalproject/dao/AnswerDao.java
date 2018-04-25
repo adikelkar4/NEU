@@ -26,6 +26,16 @@ import com.finalproject.pojo.User;
 public class AnswerDao extends DAO {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
+	public void deleteAnswer(int questionId, int userId) {
+		begin();
+		String hql = "delete from Answer where questionID= :questionId AND userID= :userId";
+		Query query = getSession().createQuery(hql);
+		query.setParameter("questionId", questionId);
+		query.setParameter("userID", userId);
+		commit();
+		close();
+	}
+	
 	public Answer saveAnswer(String answerContent, Question q, User u) {
 		Answer a = new Answer();
 		a.setAnswerContent(answerContent);
@@ -46,7 +56,7 @@ public class AnswerDao extends DAO {
 	public ArrayList<Answer> getAnswersByQuestion(Question q) {
 		int qId = q.getQuestionID();
 		logger.info("question id here " + qId);
-		Query query = getSession().createQuery("from Answer where questionID = ?");
+		Query query = getSession().createQuery("from Answer where questionID = ? order by answerDateTime DESC");
 		query.setInteger(0, qId);
 		logger.info(String.valueOf(query));
 		query.setComment("HQL " + query);

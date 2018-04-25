@@ -45,6 +45,8 @@ public class QuestionController {
 		try {
 			Question quest = new Question();
 			HttpSession session = request.getSession(true);
+			String questionEncoded = question.replace(' ', '-').replace("?", "");
+			quest.setQuestionEncoded(questionEncoded);
 			quest.setQuestion(question);
 			quest.setqDescription(questionDescription);
 			User usr = (User) session.getAttribute("UserSession");

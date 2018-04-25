@@ -23,21 +23,18 @@ public class QuestionDao extends DAO {
 		begin();
 		getSession().save(q);
 		commit();
-		close();
 		return q;
 	}
 
 	public List<Question> getAllQuestions() {
-		begin();
-		List<Question> allQuestions = getSession().createQuery("from Question").list();
-		close();
+		List<Question> allQuestions = getSession().createQuery("from Question order by postedDate desc").list();
 		return allQuestions;
 	}
 
 	public Question getQuestionByName(String questionText) {
 		try {
 			Criteria crit = getSession().createCriteria(Question.class);
-			crit.add(Restrictions.ilike("question", questionText, MatchMode.EXACT));
+			crit.add(Restrictions.like("questionEncoded", questionText, MatchMode.EXACT));
 			crit.setMaxResults(1);
 			Question quest = (Question) crit.uniqueResult();
 			if (quest != null) {
@@ -68,53 +65,4 @@ public class QuestionDao extends DAO {
 		}
 		return null;
 	}
-
-	// public List<Question> getSome() {
-	// begin();
-	//
-	// Criteria crit = getSession().createCriteria(Question.class);
-	//
-	// Criteria crit2 = getSession().createCriteria(Question.class, "quest");
-	//
-	// crit2.add(Restrictions.sqlRestriction("quest.description like '%asd%'"));
-	//
-	// crit.add(Restrictions.eq("questionID", "2"));
-	// crit.add(Restrictions.ilike("qDescription", "asd", MatchMode.ANYWHERE));
-	//
-	// Criterion equaslID = Restrictions.eq("questionID", 2);
-	// Criterion isLike = Restrictions.eq("qDescription", "someval");
-	//
-	// Criteria ct = getSession().createCriteria(Question.class);
-	// ct.add(Restrictions.ilike("qDescription", "asdasdas", MatchMode.ANYWHERE));
-	// ct.addOrder(Order.asc("qDescription"));
-	//
-	//
-	// LogicalExpression conditionsAND = Restrictions.and(equaslID, isLike);
-	// LogicalExpression conditionsOR = Restrictions.or(equaslID, conditionsAND);
-	//
-	// crit.add(conditionsOR);
-	//
-	// List<String> list1 = (List<String>) crit.list();
-	//
-	//
-	// List<Question> someQuestions = (List<Question>) crit.list();
-	// return someQuestions;
-	// }
-
-	// public Question getAllQuestions(String email, String password) {
-	// try {
-	// begin();
-	// Query q = getSession().createQuery("from User where email = :email AND
-	// password = :password");
-	// q.setString("email", email);
-	// q.setString("password", password);
-	// User user = (User) q.getSingleResult();
-	// close();
-	// return user;
-	// } catch (Exception e) {
-	// // TODO: handle exception
-	// e.printStackTrace();
-	// return null;
-	// }
-	// }
 }
