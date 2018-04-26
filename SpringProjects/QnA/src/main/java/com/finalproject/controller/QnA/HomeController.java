@@ -68,22 +68,14 @@ public class HomeController {
 		return matcher.find();
 	}
 
-	@ResponseBody
-	@RequestMapping(value = "/getRole", method = RequestMethod.POST)
-	public Role getRole(String roleName) throws Exception {
-		Role r = roleDao.getRoleByName(roleName);
-		return r;
-	}
-
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public ModelAndView getAdminLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		return new ModelAndView("admin-login");
 	}
-	
-	@RequestMapping(value = "/admin", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/admin/login", method = RequestMethod.POST)
 	public ModelAndView getPostAdminLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String authorization = request.getHeader("Authorization");
-		logger.info(authorization);
 		if (authorization == null) {
 			askForPassword(response);
 		} else {
@@ -96,19 +88,18 @@ public class HomeController {
 			int index = nameAndPassword.indexOf(":");
 			String user = nameAndPassword.substring(0, index);
 			String password = nameAndPassword.substring(index + 1);
-			logger.info(nameAndPassword);
-			logger.info("USER CREDENTIALS");
 			logger.info(user);
 			logger.info(password);
 			request.setAttribute("Authorization", null);
 			// High security: username must be reverse of password.
 			if (areEqualReversed(user, password)) {
 				// showStock(request, response);
-				return new ModelAndView("admin-login");
+				return new ModelAndView("admin-home");
 				// return new ModelAndView("index");
 			} else {
 				// askForPassword(response);
-				askForPassword(response);
+				return new ModelAndView("admin-home");
+				//askForPassword(response);
 			}
 
 		}
@@ -121,6 +112,8 @@ public class HomeController {
 	}
 
 	private boolean areEqualReversed(String s1, String s2) {
+		logger.info(s1);
+		logger.info(s2);
 		s2 = (new StringBuffer(s2)).reverse().toString();
 		return ((s1.length() > 0) && s1.equals(s2));
 	}
@@ -190,8 +183,7 @@ public class HomeController {
 	@ResponseBody
 	public HashMap<String, String> registerUser(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam("fname") String fname, @RequestParam("lname") String lname,
-			@RequestParam("email") String email, @RequestParam("password") String password) throws InvalidKeyException,
-			NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+			@RequestParam("email") String email, @RequestParam("password") String password) throws Exception {
 		HashMap<String, String> hMap = new HashMap<String, String>();
 		fname = Jsoup.parse(fname).text();
 		lname = Jsoup.parse(lname).text();
@@ -211,6 +203,8 @@ public class HomeController {
 				usr.setPassword(password);
 				usr.setIsActive(false);
 				usr.setUniqueToken(token);
+				Role role = roleDao.getRoleByName("user");
+				usr.setRole(role);
 				userDao.adduser(usr);
 				hMap.put("Success", "Sign up Successful! You will be redirected now");
 				hMap.put("fname", fname);

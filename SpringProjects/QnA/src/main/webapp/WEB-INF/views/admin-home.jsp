@@ -34,6 +34,24 @@ jQuery(function($) {
 		},
 		errorPlacement : function(error, element) {
 			error.insertAfter(element);
+		},
+		submitHandler : function(form) {
+			$.post("admin",{
+				email : $("#login_email").val(),
+				password : $("#login_password").val()
+			}, function(data, status) {
+				if (!$.trim(data)) {
+					console.log("Invalid username or password");
+					$(".loginerror").html("Invalid username or password. Please try again.")
+					$("#submit").val("Login");
+				} else {
+					console.log(data)
+					console.log("First Name "+ data.fname)
+					console.log("Last Name "+ data.lname)
+					console.log("Email "+ data.email)
+					window.location.href = pathname+ "/home";
+				}
+			});
 		}
 	});
 })
@@ -44,21 +62,8 @@ jQuery(function($) {
 	<h2 style="text-align: center; color: black;">Login with your admin credentials</h2>
 	<div class="inner_container">
 		<div class="user_action loginform">
-			<h5>Login</h5>
-			<form name="loginform" action="admin/login" method="post">
-				<p>
-					<input placeholder="Email" type="email" id="login_email"
-						name="login_email" />
-				</p>
-				<p>
-					<input placeholder="Password" type="password" id="login_password"
-						name="login_password" />
-				</p>
-				<p>
-					<input id="submit" type="submit" value="Login" name="submit" />
-				</p>
-				<div class="loginerror"></div>
-			</form>
+			<h5>Welcome admin</h5>
+			
 		</div>
 	</div>
 </div>
