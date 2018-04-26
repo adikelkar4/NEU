@@ -28,10 +28,12 @@ public class AnswerDao extends DAO {
 
 	public void deleteAnswer(int questionId, int userId) {
 		begin();
-		String hql = "delete from Answer where questionID= :questionId AND userID= :userId";
+		User usr = (User)getSession().createQuery("from User where userID=:userId").setParameter("userId", userId).uniqueResult();
+		String hql = "delete from Answer where questionID= :questionId AND user= :userId";
 		Query query = getSession().createQuery(hql);
 		query.setParameter("questionId", questionId);
-		query.setParameter("userID", userId);
+		query.setParameter("userId", usr);
+		query.executeUpdate();
 		commit();
 		close();
 	}

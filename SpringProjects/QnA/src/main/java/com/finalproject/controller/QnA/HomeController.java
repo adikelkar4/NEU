@@ -31,9 +31,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.finalproject.dao.QuestionDao;
+import com.finalproject.dao.RoleDao;
 import com.finalproject.dao.UserDao;
 import com.finalproject.pojo.Question;
+import com.finalproject.pojo.Role;
 import com.finalproject.pojo.User;
+
+import sun.misc.BASE64Decoder;
 
 /**
  * Handles requests for the application home page.
@@ -44,6 +48,10 @@ public class HomeController {
 	@Autowired
 	@Qualifier("userDao")
 	UserDao userDao;
+
+	@Autowired
+	@Qualifier("roleDao")
+	RoleDao roleDao;
 
 	@Autowired
 	@Qualifier("questionDao")
@@ -60,15 +68,83 @@ public class HomeController {
 		return matcher.find();
 	}
 
-	@RequestMapping(value = "/view/{question_code}", method = RequestMethod.GET)
-	public ModelAndView getQuestionPage(HttpServletRequest request, @PathVariable("question_code") String param) {
-		if (param != "") {
-			logger.info(param);
-			Question q = questionDao.getQuestionByName(param);
-			return new ModelAndView("question-view", "question", q);
+	@ResponseBody
+	@RequestMapping(value = "/getRole", method = RequestMethod.POST)
+	public Role getRole(String roleName) throws Exception {
+		Role r = roleDao.getRoleByName(roleName);
+		return r;
+	}
+
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	public ModelAndView getAdminLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		return new ModelAndView("admin-login");
+	}
+	
+	@RequestMapping(value = "/admin", method = RequestMethod.POST)
+	public ModelAndView getPostAdminLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String authorization = request.getHeader("Authorization");
+		logger.info(authorization);
+		if (authorization == null) {
+			askForPassword(response);
 		} else {
-			return null;
+			String userInfo = authorization.substring(6).trim();
+			logger.info("userinfo");
+			logger.info(authorization);
+			BASE64Decoder decoder = new BASE64Decoder();
+			String nameAndPassword = new String(decoder.decodeBuffer(userInfo));
+			// Decoded part looks like "username:password".
+			int index = nameAndPassword.indexOf(":");
+			String user = nameAndPassword.substring(0, index);
+			String password = nameAndPassword.substring(index + 1);
+			logger.info(nameAndPassword);
+			logger.info("USER CREDENTIALS");
+			logger.info(user);
+			logger.info(password);
+			request.setAttribute("Authorization", null);
+			// High security: username must be reverse of password.
+			if (areEqualReversed(user, password)) {
+				// showStock(request, response);
+				return new ModelAndView("admin-login");
+				// return new ModelAndView("index");
+			} else {
+				// askForPassword(response);
+				askForPassword(response);
+			}
+
 		}
+		return new ModelAndView("admin-home");
+	}
+
+	private void askForPassword(HttpServletResponse response) {
+		response.setStatus(response.SC_UNAUTHORIZED); // I.e., 401
+		response.setHeader("WWW-Authenticate", "BASIC realm=\"Insider-Trading\"");
+	}
+
+	private boolean areEqualReversed(String s1, String s2) {
+		s2 = (new StringBuffer(s2)).reverse().toString();
+		return ((s1.length() > 0) && s1.equals(s2));
+	}
+
+	@RequestMapping(value = "/view/{question_code}", method = RequestMethod.GET)
+	public ModelAndView getQuestionPage(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("question_code") String param) {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("UserSession") != null) {
+			try {
+				response.sendRedirect("home");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			if (param != "") {
+				Question q = questionDao.getQuestionByName(param);
+				return new ModelAndView("question-view", "question", q);
+			} else {
+				return null;
+			}
+		}
+		return null;
+
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)

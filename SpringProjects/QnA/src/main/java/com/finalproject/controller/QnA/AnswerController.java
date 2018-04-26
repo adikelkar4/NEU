@@ -55,9 +55,9 @@ public class AnswerController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/answer/delete", method = RequestMethod.POST)
-	private Boolean deleteAnswer(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("questionId") int questionId, @RequestParam("user") String userId) {
-		return false;
+	private void deleteAnswer(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("questionId") int questionId, @RequestParam("user") int userId) {
+		answerDao.deleteAnswer(questionId, userId);
 	}
 
 	@ResponseBody

@@ -46,15 +46,15 @@
 					$(".answerList").append("<div class='posted_date'>" + postedDate + "</div>");
 					$(".answerList").append("<div class='answer_text'>" + answerText + "</div>");
 					if(authorInfo == "<p>"+userName+"</p>") {
-						$(".answerList").append("<a class='answerOps' id='updateAnswer'><strong>Update</strong></a> | <a id='answerOps' data-toggle='modal' href='#deleteAnswer'><strong>Delete</strong></a>");
+						$(".answerList").append("<a id='answerOps' data-toggle='modal' href='#deleteAnswer'><strong>Delete</strong></a>");
 					}
 				}
 				$(".answerList").append("<hr/>");
 			}
-			if(userExists != "" && userExists == "true") {
+			/*if(userExists != "" && userExists == "true") {
 				$("#writeAnswer").hide();
 				$("#updateAnswer").append("<a href='#myAnswer' class='updateMyAnswer'>Update My Answer</a>");
-			}
+			}*/
 		})
 		$("#postAnswer").on("click", function(e) {
 			e.preventDefault();
@@ -80,7 +80,7 @@
 				user : '${sessionScope.UserSession.userID}'
 			}, function(data, status) {
 				if (data != null) {
-					// Answer posted successfully
+					// Answer deleted successfully
 					location.reload();
 				} else {
 					console.log("error occurred ")

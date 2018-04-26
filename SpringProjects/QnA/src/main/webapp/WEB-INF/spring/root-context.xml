@@ -4,7 +4,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	<bean id="userDao" class="com.finalproject.dao.UserDao"></bean>	
+	<bean id="roleDao" class="com.finalproject.dao.RoleDao"></bean>
+	<bean id="userDao" class="com.finalproject.dao.UserDao"></bean>
 	<bean id="questionDao" class="com.finalproject.dao.QuestionDao"></bean>
 	<bean id="answerDao" class="com.finalproject.dao.AnswerDao"></bean>
 	<!-- Spring Email Sender Bean Configuration -->

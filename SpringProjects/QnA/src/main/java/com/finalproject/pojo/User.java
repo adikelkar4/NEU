@@ -39,11 +39,11 @@ public class User {
 
 	@Column(name = "password")
 	private String password;
-	
+
 	@Column(name = "isActive", nullable = false, columnDefinition = "BIT default 0")
 	private Boolean isActive;
-	
-	@Column(name="token", nullable = false)
+
+	@Column(name = "token", nullable = false)
 	private String uniqueToken;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
@@ -51,40 +51,48 @@ public class User {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Answer> answers = new HashSet<Answer>();
-	
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Notification> notification = new HashSet<Notification>();
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "roleID", nullable = false)
+	private Role role;
+
 	public User() {
+	}
+
+	public Role getRole() {
+		return role;
+	}
+	
+	public void setRole(Role role) {
+		this.role = role;
 	}
 	
 	public String getUniqueToken() {
 		return uniqueToken;
 	}
 
-
 	public void setUniqueToken(String uniqueToken) {
 		this.uniqueToken = uniqueToken;
 	}
 
-
 	public Boolean getIsActive() {
 		return isActive;
 	}
-	
+
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
 
-
 	public Set<Notification> getNotification() {
 		return notification;
 	}
-	
+
 	public void setNotification(Set<Notification> notification) {
 		this.notification = notification;
 	}
-
 
 	public Set<Answer> getAnswers() {
 		return answers;
