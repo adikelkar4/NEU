@@ -26,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class EmailController {
 	static String emailToRecipient, emailSubject, emailMessage;
-	static final String emailFromRecipient = "adi.sandbox";
+	static final String emailFromRecipient = "<Username or any other value>";
 	static ModelAndView modelViewObj;
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
